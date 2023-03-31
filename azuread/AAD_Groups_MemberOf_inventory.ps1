@@ -7,37 +7,37 @@
 
 param([string[]]$UserList,[switch]$TransitiveMembership=$false)
 
-#region Authentication
-#We use the client credentials flow as an example. For production use, REPLACE the code below wiht your preferred auth method. NEVER STORE CREDENTIALS IN PLAIN TEXT!!!
+# #region Authentication
+# #We use the client credentials flow as an example. For production use, REPLACE the code below wiht your preferred auth method. NEVER STORE CREDENTIALS IN PLAIN TEXT!!!
 
-#Variables to configure
-$tenantID = "tenant.onmicrosoft.com" #your tenantID or tenant root domain
-$appID = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" #the GUID of your app. For best result, use app with Directory.Read.All scope granted.
-$client_secret = "verylongsecurestring" #client secret for the app
+# #Variables to configure
+# $tenantID = "tenant.onmicrosoft.com" #your tenantID or tenant root domain
+# $appID = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" #the GUID of your app. For best result, use app with Directory.Read.All scope granted.
+# $client_secret = "verylongsecurestring" #client secret for the app
 
-#Prepare token request
-$url = 'https://login.microsoftonline.com/' + $tenantId + '/oauth2/v2.0/token'
+# #Prepare token request
+# $url = 'https://login.microsoftonline.com/' + $tenantId + '/oauth2/v2.0/token'
 
-$body = @{
-    grant_type = "client_credentials"
-    client_id = $appID
-    client_secret = $client_secret
-    scope = "https://graph.microsoft.com/.default"
-}
+# $body = @{
+#     grant_type = "client_credentials"
+#     client_id = $appID
+#     client_secret = $client_secret
+#     scope = "https://graph.microsoft.com/.default"
+# }
 
-#Obtain the token
-Write-Verbose "Authenticating..."
-try { 
-    $tokenRequest = Invoke-WebRequest -Method Post -Uri $url -ContentType "application/x-www-form-urlencoded" -Body $body -UseBasicParsing -ErrorAction Stop 
-    $token = ($tokenRequest.Content | ConvertFrom-Json).access_token
+# #Obtain the token
+# Write-Verbose "Authenticating..."
+# try { 
+#     $tokenRequest = Invoke-WebRequest -Method Post -Uri $url -ContentType "application/x-www-form-urlencoded" -Body $body -UseBasicParsing -ErrorAction Stop 
+#     $token = ($tokenRequest.Content | ConvertFrom-Json).access_token
 
-    $authHeader = @{
-       'Content-Type'='application\json'
-       'Authorization'="Bearer $token"
-    }
-}
-catch { Write-Error "Unable to obtain access token, aborting..." -ErrorAction Stop; return }
-#endregion Authentication
+#     $authHeader = @{
+#        'Content-Type'='application\json'
+#        'Authorization'="Bearer $token"
+#     }
+# }
+# catch { Write-Error "Unable to obtain access token, aborting..." -ErrorAction Stop; return }
+# #endregion Authentication
 
 
 #region Users
